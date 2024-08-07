@@ -46,6 +46,10 @@
 	path = third_party/geogram
 	url = https://github.com/PyMesh/geogram.git
 	shallow = true
+[submodule "third_party/draco"]
+	path = third_party/draco
+	url = https://github.com/google/draco.git
+	shallow = true
 [submodule "third_party/TetWild"]
 	path = third_party/TetWild
 	url = https://github.com/PyMesh/TetWild.git
