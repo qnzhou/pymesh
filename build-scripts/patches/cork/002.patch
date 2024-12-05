@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 454e956..a27c2fa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,8 +1,9 @@
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 3.1)
+ project(cork)
+ SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
+ 
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++set(CMAKE_CXX_STANDARD 11)
++
+ add_library(cork STATIC 
+   src/file_formats/files.cpp
+   src/file_formats/ifs.cpp
+@@ -27,6 +28,9 @@ set(INCLUDEDIRS
+ 
+ if(UNIX)
+     target_compile_options(cork PRIVATE -fPIC -fvisibility=hidden)
++else()
++    target_compile_definitions(cork PRIVATE -D_USE_MATH_DEFINES -DNOMINMAX)
++    target_compile_definitions(cork-bin PRIVATE -D_USE_MATH_DEFINES -DNOMINMAX)
+ endif(UNIX)
+ 
+ target_include_directories(cork PRIVATE ${INCLUDEDIRS})

@@ -1,0 +1,13 @@
+diff --git a/include/tbb/internal/_tbb_windef.h b/include/tbb/internal/_tbb_windef.h
+index 7fe8df4..605e455 100644
+--- a/include/tbb/internal/_tbb_windef.h
++++ b/include/tbb/internal/_tbb_windef.h
+@@ -60,7 +60,7 @@ namespace std {
+ 	        #pragma comment(lib, __TBB_STRING(__TBB_LIB_NAME))
+         #else
+ 			#ifdef _DEBUG
+-				#pragma comment(lib, "tbb_debug.lib")
++				#pragma comment(lib, "tbb.lib")
+ 			#else
+ 				#pragma comment(lib, "tbb.lib")
+ 			#endif

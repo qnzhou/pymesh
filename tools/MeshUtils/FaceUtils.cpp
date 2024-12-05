@@ -10,18 +10,18 @@ bool FaceUtils::is_colinear_2D(
         const Vector2F& v0,
         const Vector2F& v1,
         const Vector2F& v2) {
-    exactinit();
+    prdc_exactinit();
     double v0_xy[2] = {v0[0], v0[1]};
     double v1_xy[2] = {v1[0], v1[1]};
     double v2_xy[2] = {v2[0], v2[1]};
-    return orient2d(v0_xy, v1_xy, v2_xy) == 0;
+    return prdc_orient2d(v0_xy, v1_xy, v2_xy) == 0;
 }
 
 bool FaceUtils::is_colinear_3D(
         const Vector3F& v0,
         const Vector3F& v1,
         const Vector3F& v2) {
-    exactinit();
+    prdc_exactinit();
     double v0_xy[2] = {v0[0], v0[1]};
     double v1_xy[2] = {v1[0], v1[1]};
     double v2_xy[2] = {v2[0], v2[1]};
@@ -34,9 +34,9 @@ bool FaceUtils::is_colinear_3D(
     double v1_zx[2] = {v1[2], v1[0]};
     double v2_zx[2] = {v2[2], v2[0]};
 
-    bool colinear_xy = orient2d(v0_xy, v1_xy, v2_xy) == 0;
-    bool colinear_yz = orient2d(v0_yz, v1_yz, v2_yz) == 0;
-    bool colinear_zx = orient2d(v0_zx, v1_zx, v2_zx) == 0;
+    bool colinear_xy = prdc_orient2d(v0_xy, v1_xy, v2_xy) == 0;
+    bool colinear_yz = prdc_orient2d(v0_yz, v1_yz, v2_yz) == 0;
+    bool colinear_zx = prdc_orient2d(v0_zx, v1_zx, v2_zx) == 0;
     return colinear_xy && colinear_yz && colinear_zx;
 }
 
@@ -45,7 +45,7 @@ std::vector<size_t> FaceUtils::get_degenerated_faces(
     std::vector<size_t> result;
     const size_t num_faces = faces.rows();
     const size_t dim = vertices.cols();
-    exactinit();
+    prdc_exactinit();
 
     if (dim == 3) {
         for (size_t i=0; i<num_faces; i++) {
@@ -80,7 +80,7 @@ VectorF FaceUtils::get_triangle_orientations(
                 "Triangle orientation is only well-defined in 2D");
     }
 
-    exactinit();
+    prdc_exactinit();
 
     VectorF results(num_faces);
     for (size_t i=0; i<num_faces; i++) {
@@ -88,7 +88,7 @@ VectorF FaceUtils::get_triangle_orientations(
         double v0_xy[2] = {vertices(f[0], 0), vertices(f[0], 1)};
         double v1_xy[2] = {vertices(f[1], 0), vertices(f[1], 1)};
         double v2_xy[2] = {vertices(f[2], 0), vertices(f[2], 1)};
-        results[i] = orient2d(v0_xy, v1_xy, v2_xy);
+        results[i] = prdc_orient2d(v0_xy, v1_xy, v2_xy);
     }
     return results;
 }

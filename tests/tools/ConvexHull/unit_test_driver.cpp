@@ -1,4 +1,10 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#include <stdio.h>
+#ifdef _MSC_VER
+// libqhull has io.h conflicts the io.h in windows SDK.
+#include <../ucrt/io.h>
+#endif
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #ifdef WITH_CGAL

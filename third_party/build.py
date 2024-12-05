@@ -6,6 +6,7 @@
 import argparse
 import subprocess
 import os
+import re
 import os.path
 import tempfile
 import shutil
@@ -25,7 +26,21 @@ def parse_args():
     return parser.parse_args();
 
 def get_pymesh_dir():
-    return os.path.join(sys.path[0], "..");
+    p = os.path.normpath(os.path.join(sys.path[0], ".."))
+    return re.sub(r'\\', '/', p)
+
+
+def hack_cmake_install(fn, instdir):
+    with open(fn) as f:
+        old = f.read()
+    prefix = f"""if (BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_INSTALL_PREFIX "{instdir}/debug")
+else()
+    set(CMAKE_INSTALL_PREFIX "{instdir}")
+endif()"""
+    with open(fn, 'w') as fo:
+        fo.write(prefix + "\n" + old)
+
 
 def build_generic(libname, build_flags="", cleanup=True):
     pymesh_dir = get_pymesh_dir();
@@ -41,13 +56,29 @@ def build_generic(libname, build_flags="", cleanup=True):
             build_flags + \
             " -DCMAKE_INSTALL_PREFIX={}/python/pymesh/third_party/".format(pymesh_dir);
     subprocess.check_call(cmd.split(), cwd=build_dir);
+    # log cmd for debugging build process
+    with open(f"{build_dir}/cmd.txt", "w") as f:
+        print(cmd, file=f)
 
     # Build cgal
-    cmd = "cmake --build {}".format(build_dir);
-    subprocess.check_call(cmd.split());
-
-    cmd = "cmake --build {} --target install".format(build_dir);
-    subprocess.check_call(cmd.split());
+    if os.name == "nt":
+        hack_cmake_install(f"{build_dir}/cmake_install.cmake", f"{pymesh_dir}/python/pymesh/third_party")
+        os.environ['_CL_']='/MDd'
+        cmd = f"cmake --build {build_dir} --config Debug"
+        subprocess.check_call(cmd.split())
+        os.environ['_CL_']='/MD'
+        cmd = f"cmake --build {build_dir} --config Release"
+        subprocess.check_call(cmd.split())
+        os.environ['_CL_']=''
+        cmd = f"cmake --build {build_dir} --config Debug --target install"
+        subprocess.check_call(cmd.split())
+        cmd = f"cmake --build {build_dir} --config Release --target install"
+        subprocess.check_call(cmd.split())
+    else:
+        cmd = "cmake --build {}".format(build_dir);
+        subprocess.check_call(cmd.split());
+        cmd = "cmake --build {} --target install".format(build_dir);
+        subprocess.check_call(cmd.split());
 
     # Clean up
     if cleanup:

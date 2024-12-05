@@ -21,7 +21,7 @@ namespace PyMesh {
 template<int DIM, int HashType>
 struct HashMapTrait {
     static constexpr int dim = DIM;
-    typedef VectorHashKey<long, DIM> HashKey;
+    typedef VectorHashKey<int64_t, DIM> HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {

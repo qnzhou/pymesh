@@ -18,6 +18,12 @@ using namespace TriangleMetricHelper;
 
 const Real TriangleMetric::epsilon = 1e-8;
 bool TriangleMetric::use_lin_canny = true;
+void TriangleMetric::setUseLinCanny(bool v) {
+	use_lin_canny = v;
+}
+bool TriangleMetric::getUseLinCanny() {
+	return use_lin_canny;
+}
 
 TriangleMetric::TriangleMetric() {
 	m_ft_types[0] = m_ft_types[1] = VERTEX;

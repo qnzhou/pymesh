@@ -12,8 +12,10 @@ class Quaternion:
         z (``float``): same as ``quaternion[3]``.
     """
 
-    def __init__(self, quat=[1, 0, 0, 0]):
-        self.__quat = np.array(quat, dtype=np.float)
+    def __init__(self, quat=None):
+        if quat is None:
+            quat = [1, 0, 0, 0]
+        self.__quat = np.array(quat, dtype=np.float64)
         self.normalize()
 
     @classmethod

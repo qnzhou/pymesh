@@ -23,7 +23,7 @@ DegeneratedTriangleRemoval::DegeneratedTriangleRemoval(
         const MatrixFr& vertices, const MatrixIr& faces) :
 m_vertices(vertices), m_faces(faces) {
     assert(m_faces.cols() == 3);
-    exactinit();
+    prdc_exactinit();
     init_ori_face_indices();
 }
 
