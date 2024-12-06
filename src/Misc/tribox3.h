@@ -45,7 +45,7 @@
 
 using namespace PyMesh;
 
-int planeBoxOverlap(const Float normal[3], const Float vert[3], const Float maxbox[3])	// -NJMP-
+inline int planeBoxOverlap(const Float normal[3], const Float vert[3], const Float maxbox[3])	// -NJMP-
 {
   int q;
   Float vmin[3],vmax[3],v;
@@ -116,7 +116,7 @@ int planeBoxOverlap(const Float normal[3], const Float vert[3], const Float maxb
 	rad = fa * boxhalfsize[X] + fb * boxhalfsize[Y];   \
 	if(min>rad || max<-rad) return 0;
 
-int triBoxOverlap(const Float boxcenter[3],const Float boxhalfsize[3],const Float triverts[3][3])
+inline int triBoxOverlap(const Float boxcenter[3],const Float boxhalfsize[3],const Float triverts[3][3])
 {
 
   /*    use separating axis theorem to test overlap between triangle and box */

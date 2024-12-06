@@ -26,3 +26,4 @@ third_party/build/
 third_party/local/
 cmake/SetInstallRpath.cmake
 cmake/PythonPrefix.cmake
+/vcpkg/

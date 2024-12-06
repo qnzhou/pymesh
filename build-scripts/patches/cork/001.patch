@@ -1,0 +1,38 @@
+diff --git a/src/isct/fixint.h b/src/isct/fixint.h
+index cf0c333..1391640 100644
+--- a/src/isct/fixint.h
++++ b/src/isct/fixint.h
+@@ -46,12 +46,7 @@
+ 
+ 
+ #include <cstddef>
+-#ifdef _WIN32
+-#include <mpir.h>
+-#else
+ #include <gmp.h>
+-#endif
+-
+ #include <iostream>
+ #include <iomanip>
+ #include <string>
+diff --git a/src/isct/gmpext4.h b/src/isct/gmpext4.h
+index 1a5541c..839dc01 100644
+--- a/src/isct/gmpext4.h
++++ b/src/isct/gmpext4.h
+@@ -25,16 +25,7 @@
+ // +-------------------------------------------------------------------------
+ #pragma once
+ 
+-#ifdef _WIN32
+-#pragma warning(disable: 4800)
+-#pragma warning(disable: 4244)
+-#include <mpirxx.h>
+-#pragma warning(default: 4244)
+-#pragma warning(default: 4800)
+-#else
+ #include <gmpxx.h>
+-#endif
+-
+ #include <iostream>
+ 
+ 

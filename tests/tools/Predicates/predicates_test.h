@@ -11,11 +11,11 @@ TEST(Orientat3D, Simple) {
     double b[3]{0.0, 0.0, 0.0};
     double c[3]{0.0, 0.0, 0.0};
     double d[3]{0.0, 0.0, 0.0};
-    double r1 = orient3d(a,b,c,d);
-    double r2 = orient3dexact(a,b,c,d);
+    double r1 = prdc_orient3d(a,b,c,d);
+    double r2 = prdc_orient3dexact(a,b,c,d);
     using Arr3D = Eigen::Matrix<double, 3, 1>;
     auto run = [](Arr3D& pa, Arr3D& pb, Arr3D& pc, Arr3D& pd) {
-        return orient3d(pa.data(), pb.data(), pc.data(), pd.data());
+        return prdc_orient3d(pa.data(), pb.data(), pc.data(), pd.data());
     };
     Arr3D pa(0,0,0);
     double r3 = run(pa, pa, pa, pa);

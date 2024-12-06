@@ -20,7 +20,7 @@ VectorF VoxelUtils::get_tet_orientations(
         throw RuntimeError("Degenerate tet expect a tet mesh.");
     }
 
-    exactinit();
+    prdc_exactinit();
     VectorF results(num_tets);
     results.setZero();
     for (size_t i=0; i<num_tets; i++) {
@@ -49,7 +49,7 @@ VectorF VoxelUtils::get_tet_orientations(
         // the opposite (i.e. d is above the triangle (a,b,c)), so this check
         // switch the ordering of a and b to return positive if tet is not
         // inverted.
-        results[i] = orient3d(b, a, c, d);
+        results[i] = prdc_orient3d(b, a, c, d);
     }
     return results;
 }
@@ -70,7 +70,7 @@ VectorF VoxelUtils::is_delaunay(
     }
 
     constexpr int INVALID = std::numeric_limits<int>::max();
-    auto get_opposite_vertex = [&tets](size_t index, const Triplet& f) {
+    auto get_opposite_vertex = [&tets, INVALID](size_t index, const Triplet& f) {
         for (size_t i=0; i<4; i++) {
             const int val = tets(index, i);
             if (val != f.get_data()[0] &&
@@ -111,7 +111,7 @@ VectorF VoxelUtils::is_delaunay(
                 // Note that the orientation of the sphere/tet is different from
                 // the orientation defined by the MSH format.  Swapping v0 and
                 // v1 to ensure consistency.
-                auto r = insphere(
+                auto r = prdc_insphere(
                         const_cast<double*>(v1.data()),
                         const_cast<double*>(v0.data()),
                         const_cast<double*>(v2.data()),

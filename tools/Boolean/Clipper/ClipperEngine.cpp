@@ -35,7 +35,7 @@ namespace ClipperEngineHelper {
             if (itr != adjacencies.end()) {
                 itr->second.push_back(edge[1]);
             } else {
-                adjacencies.insert({edge[0], {edge[1]}});
+                adjacencies.insert({(size_t)edge[0], {edge[1]}});
             }
         }
 
@@ -148,8 +148,8 @@ void ClipperEngine::clip(ClipperLib::ClipType type) {
 void ClipperEngine::initialize_if_needed() {
     m_vertices = MatrixFr::Zero(0,2);
     m_faces = MatrixIr::Zero(0,3);
-    if (m_vertices_1.cols() != 2) { m_vertices_1 = m_vertices_1.leftCols(2); }
-    if (m_vertices_2.cols() != 2) { m_vertices_2 = m_vertices_2.leftCols(2); }
+    if (m_vertices_1.cols() != 2) { m_vertices_1 = MatrixFr(m_vertices_1.leftCols(2)); }
+    if (m_vertices_2.cols() != 2) { m_vertices_2 = MatrixFr(m_vertices_2.leftCols(2)); }
     m_loops_1.clear();
     m_loops_2.clear();
     extract_boundary_loops();

@@ -30,7 +30,7 @@ class TriangleMetric {
         }
 
         Real getClosestPts(Point& p1, Point& p2) {
-            if (use_lin_canny) {
+            if (getUseLinCanny()) {
                 return runLinCanny(p1, p2);
             } else {
                 return oldCodeWrapper(p1, p2);
@@ -99,9 +99,8 @@ class TriangleMetric {
         int m_ft_idx[2];
 
     public:
-        static void setUseLinCanny(bool v) {
-            use_lin_canny = v;
-        }
+        static void setUseLinCanny(bool v);
+        static bool getUseLinCanny();
 
     private:
         static const Real epsilon;

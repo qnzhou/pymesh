@@ -6,7 +6,7 @@
 namespace PyMesh {
 namespace TriBox2D {
 
-bool get_orientation(const Float triverts[3][2]) {
+inline bool get_orientation(const Float triverts[3][2]) {
     Float r =
         (triverts[1][0] - triverts[0][0]) *
         (triverts[2][1] - triverts[0][1]) -
@@ -15,7 +15,7 @@ bool get_orientation(const Float triverts[3][2]) {
     return r >= 0;
 }
 
-bool outside_halfplane(const Float target[2], const Float p[2], const Float n[2],
+inline bool outside_halfplane(const Float target[2], const Float p[2], const Float n[2],
         bool positive_orientation) {
     const Float v[2] = {target[0] - p[0], target[1] - p[1]};
     if (positive_orientation)
@@ -24,7 +24,7 @@ bool outside_halfplane(const Float target[2], const Float p[2], const Float n[2]
         return (v[0] * n[0] + v[1] * n[1]) < 0;
 }
 
-int triBoxOverlap(const Float boxcenter[2], const Float boxhalfsize[2], const Float triverts[3][2]) {
+inline int triBoxOverlap(const Float boxcenter[2], const Float boxhalfsize[2], const Float triverts[3][2]) {
     // Check all possible separating lines:
     // * 4 edges of the box
     // * 3 edges of the triangle

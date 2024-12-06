@@ -290,7 +290,7 @@ typename HashGridImplementation<Trait>::HashKey HashGridImplementation<Trait>::c
     return typename HashKey::VectorType(
             (value / m_cell_size).unaryExpr(
                 std::ptr_fun<Float,Float>(std::round)
-                ).template cast<long>());
+                ).template cast<int64_t>());
 }
 
 template <typename Trait>

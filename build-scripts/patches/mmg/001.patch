@@ -1,0 +1,173 @@
+diff --git a/src/common/mmgcommon.h.in b/src/common/mmgcommon.h.in
+index 5be4fc1..e5be0fd 100644
+--- a/src/common/mmgcommon.h.in
++++ b/src/common/mmgcommon.h.in
+@@ -624,21 +624,27 @@ int  MMG5_simred(MMG5_pMesh,double*,double*,double dm[2],double dn[2],double vp[
+ void MMG5_gradEigenvreq(double *dm,double *dn,double,int8_t,int8_t *);
+ int  MMG5_updatemetreq_ani(double *n,double dn[2],double vp[2][2]);
+ 
++#ifdef _WIN32
++#define X_MMG_WEAK
++#else
++#define X_MMG_WEAK __attribute__((weak))
++#endif
++
+ /* function pointers */
+-int    (*MMG5_chkmsh)(MMG5_pMesh,int,int);
+-int    (*MMG5_bezierCP)(MMG5_pMesh ,MMG5_Tria *,MMG5_pBezier ,char );
+-double (*MMG5_lenSurfEdg)(MMG5_pMesh mesh,MMG5_pSol sol ,int ,int, char );
+-int    (*MMG5_grad2met_ani)(MMG5_pMesh,MMG5_pSol,MMG5_pTria,int,int);
+-int    (*MMG5_grad2metreq_ani)(MMG5_pMesh,MMG5_pSol,MMG5_pTria,int,int);
+-int    (*MMG5_compute_meanMetricAtMarkedPoints)( MMG5_pMesh,MMG5_pSol);
++int    (*MMG5_chkmsh)(MMG5_pMesh,int,int) X_MMG_WEAK;
++int    (*MMG5_bezierCP)(MMG5_pMesh ,MMG5_Tria *,MMG5_pBezier ,char) X_MMG_WEAK;
++double (*MMG5_lenSurfEdg)(MMG5_pMesh mesh,MMG5_pSol sol ,int ,int, char) X_MMG_WEAK;
++int    (*MMG5_grad2met_ani)(MMG5_pMesh,MMG5_pSol,MMG5_pTria,int,int) X_MMG_WEAK;
++int    (*MMG5_grad2metreq_ani)(MMG5_pMesh,MMG5_pSol,MMG5_pTria,int,int) X_MMG_WEAK;
++int    (*MMG5_compute_meanMetricAtMarkedPoints)( MMG5_pMesh,MMG5_pSol) X_MMG_WEAK;
+ 
+ 
+ /* useful functions to debug */
+-int  (*MMG5_indElt)(MMG5_pMesh mesh,int kel);
+-int  (*MMG5_indPt)(MMG5_pMesh mesh,int kp);
++int  (*MMG5_indElt)(MMG5_pMesh mesh,int kel) X_MMG_WEAK;
++int  (*MMG5_indPt)(MMG5_pMesh mesh,int kp) X_MMG_WEAK;
+ 
+ #ifdef USE_SCOTCH
+-int    (*MMG5_renumbering)(int vertBoxNbr, MMG5_pMesh mesh, MMG5_pSol sol);
++int    (*MMG5_renumbering)(int vertBoxNbr, MMG5_pMesh mesh, MMG5_pSol sol) X_MMG_WEAK;
+ #endif
+ 
+ void   MMG5_Set_commonFunc();
+diff --git a/src/mmg2d/mmg2d.h b/src/mmg2d/mmg2d.h
+index 678cdb7..8f77a41 100644
+--- a/src/mmg2d/mmg2d.h
++++ b/src/mmg2d/mmg2d.h
+@@ -356,13 +356,13 @@ int    lissmet_ani(MMG5_pMesh mesh,MMG5_pSol sol);
+ int    MMG2D_sum_reqEdgeLengthsAtPoint(MMG5_pMesh,MMG5_pSol,MMG5_pTria,char);
+ int    MMG2D_set_metricAtPointsOnReqEdges(MMG5_pMesh,MMG5_pSol);
+ 
+-double (*MMG2D_lencurv)(MMG5_pMesh ,MMG5_pSol ,int ,int );
+-double (*MMG2D_caltri)(MMG5_pMesh ,MMG5_pSol ,MMG5_pTria );
+-int    (*MMG2D_optlen)(MMG5_pMesh ,MMG5_pSol ,double ,int );
+-int    (*MMG2D_intmet)(MMG5_pMesh ,MMG5_pSol ,int ,char ,int ,double );
+-int    (*MMG2D_gradsiz)(MMG5_pMesh ,MMG5_pSol );
+-int    (*MMG2D_gradsizreq)(MMG5_pMesh ,MMG5_pSol );
+-int    (*MMG2D_defsiz)(MMG5_pMesh ,MMG5_pSol );
++double (*MMG2D_lencurv)(MMG5_pMesh ,MMG5_pSol ,int ,int )X_MMG_WEAK;
++double (*MMG2D_caltri)(MMG5_pMesh ,MMG5_pSol ,MMG5_pTria )X_MMG_WEAK;
++int    (*MMG2D_optlen)(MMG5_pMesh ,MMG5_pSol ,double ,int )X_MMG_WEAK;
++int    (*MMG2D_intmet)(MMG5_pMesh ,MMG5_pSol ,int ,char ,int ,double )X_MMG_WEAK;
++int    (*MMG2D_gradsiz)(MMG5_pMesh ,MMG5_pSol )X_MMG_WEAK;
++int    (*MMG2D_gradsizreq)(MMG5_pMesh ,MMG5_pSol ) X_MMG_WEAK;
++int    (*MMG2D_defsiz)(MMG5_pMesh ,MMG5_pSol )X_MMG_WEAK;
+ 
+ /* init structures */
+ void  MMG2D_Init_parameters(MMG5_pMesh mesh);
+diff --git a/src/mmg3d/libmmg3d.h b/src/mmg3d/libmmg3d.h
+index b9e1732..2c8b2e3 100644
+--- a/src/mmg3d/libmmg3d.h
++++ b/src/mmg3d/libmmg3d.h
+@@ -2195,7 +2195,7 @@ enum MMG3D_Param {
+  * >   END SUBROUTINE\n
+  *
+  */
+-  double (*MMG3D_lenedgCoor)(double *ca,double *cb,double *sa,double *sb);
++extern double (*MMG3D_lenedgCoor)(double *ca,double *cb,double *sa,double *sb);
+ 
+ /**
+  * \param mesh pointer toward the mesh structure.
+diff --git a/src/mmg3d/mmg3d.h b/src/mmg3d/mmg3d.h
+index f570e53..37d588b 100644
+--- a/src/mmg3d/mmg3d.h
++++ b/src/mmg3d/mmg3d.h
+@@ -503,22 +503,22 @@ extern int MMG5_moymet(MMG5_pMesh ,MMG5_pSol ,MMG5_pTetra ,double *);
+ int    MMG3D_set_metricAtPointsOnReqEdges (MMG5_pMesh,MMG5_pSol);
+ void MMG3D_mark_pointsOnReqEdge_fromTetra (  MMG5_pMesh mesh );
+ 
+-double (*MMG5_lenedg)(MMG5_pMesh ,MMG5_pSol ,int, MMG5_pTetra );
+-double (*MMG5_lenedgspl)(MMG5_pMesh ,MMG5_pSol ,int, MMG5_pTetra );
+-double (*MMG5_caltet)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTetra pt);
+-double (*MMG5_caltri)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTria ptt);
+-int    (*MMG3D_defsiz)(MMG5_pMesh ,MMG5_pSol );
+-int    (*MMG3D_gradsiz)(MMG5_pMesh ,MMG5_pSol );
+-int    (*MMG3D_gradsizreq)(MMG5_pMesh ,MMG5_pSol );
+-int    (*MMG5_intmet)(MMG5_pMesh,MMG5_pSol,int,char,int, double);
+-int    (*MMG5_interp4bar)(MMG5_pMesh,MMG5_pSol,int,int,double *);
+-int    (*MMG5_movintpt)(MMG5_pMesh ,MMG5_pSol, MMG3D_pPROctree ,int *, int , int );
+-int    (*MMG5_movbdyregpt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int, int ,int);
+-int    (*MMG5_movbdyrefpt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int ,int);
+-int    (*MMG5_movbdynompt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int ,int);
+-int    (*MMG5_movbdyridpt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int ,int);
+-int    (*MMG5_cavity)(MMG5_pMesh ,MMG5_pSol ,int ,int ,int *,int ,double);
+-int    (*MMG3D_PROctreein)(MMG5_pMesh ,MMG5_pSol ,MMG3D_pPROctree ,int,double );
++double (*MMG5_lenedg)(MMG5_pMesh ,MMG5_pSol ,int, MMG5_pTetra )X_MMG_WEAK;
++double (*MMG5_lenedgspl)(MMG5_pMesh ,MMG5_pSol ,int, MMG5_pTetra )X_MMG_WEAK;
++double (*MMG5_caltet)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTetra pt)X_MMG_WEAK;
++double (*MMG5_caltri)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTria ptt)X_MMG_WEAK;
++int    (*MMG3D_defsiz)(MMG5_pMesh ,MMG5_pSol )X_MMG_WEAK;
++int    (*MMG3D_gradsiz)(MMG5_pMesh ,MMG5_pSol )X_MMG_WEAK;
++int    (*MMG3D_gradsizreq)(MMG5_pMesh ,MMG5_pSol )X_MMG_WEAK;
++int    (*MMG5_intmet)(MMG5_pMesh,MMG5_pSol,int,char,int, double)X_MMG_WEAK;
++int    (*MMG5_interp4bar)(MMG5_pMesh,MMG5_pSol,int,int,double *)X_MMG_WEAK;
++int    (*MMG5_movintpt)(MMG5_pMesh ,MMG5_pSol, MMG3D_pPROctree ,int *, int , int )X_MMG_WEAK;
++int    (*MMG5_movbdyregpt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int, int ,int)X_MMG_WEAK;
++int    (*MMG5_movbdyrefpt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int ,int)X_MMG_WEAK;
++int    (*MMG5_movbdynompt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int ,int)X_MMG_WEAK;
++int    (*MMG5_movbdyridpt)(MMG5_pMesh, MMG5_pSol, MMG3D_pPROctree ,int*, int, int*, int ,int)X_MMG_WEAK;
++int    (*MMG5_cavity)(MMG5_pMesh ,MMG5_pSol ,int ,int ,int *,int ,double)X_MMG_WEAK;
++int    (*MMG3D_PROctreein)(MMG5_pMesh ,MMG5_pSol ,MMG3D_pPROctree ,int,double )X_MMG_WEAK;
+ 
+ /**
+  * \param mesh pointer toward the mesh structure.
+diff --git a/src/mmg3d/mmg3d1.c b/src/mmg3d/mmg3d1.c
+index f95aaa2..43035cd 100644
+--- a/src/mmg3d/mmg3d1.c
++++ b/src/mmg3d/mmg3d1.c
+@@ -38,7 +38,7 @@
+ 
+ #include "inlined_functions_3d.h"
+ 
+-char  ddb;
++extern char ddb;
+ 
+ /**
+  * \param mesh pointer toward the mesh structure.
+diff --git a/src/mmg3d/mmg3d1_delone.c b/src/mmg3d/mmg3d1_delone.c
+index de2b0a6..c1b02cd 100644
+--- a/src/mmg3d/mmg3d1_delone.c
++++ b/src/mmg3d/mmg3d1_delone.c
+@@ -38,7 +38,7 @@
+ 
+ #ifndef PATTERN
+ 
+-char  ddb;
++extern char ddb;
+ 
+ #define MMG3D_LOPTLMMG5_DEL     1.41
+ #define MMG3D_LOPTSMMG5_DEL     0.6
+diff --git a/src/mmgs/mmgs.h b/src/mmgs/mmgs.h
+index 270a886..64b6035 100644
+--- a/src/mmgs/mmgs.h
++++ b/src/mmgs/mmgs.h
+@@ -202,13 +202,13 @@ int    movintpt_ani(MMG5_pMesh mesh,MMG5_pSol met,int *list,int ilist);
+ int    MMGS_prilen(MMG5_pMesh mesh,MMG5_pSol met,int);
+ int    MMGS_set_metricAtPointsOnReqEdges ( MMG5_pMesh,MMG5_pSol );
+ 
+-double (*MMG5_calelt)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTria ptt);
+-int    (*MMGS_defsiz)(MMG5_pMesh mesh,MMG5_pSol met);
+-int    (*MMGS_gradsiz)(MMG5_pMesh mesh,MMG5_pSol met);
+-int    (*MMGS_gradsizreq)(MMG5_pMesh mesh,MMG5_pSol met);
+-int    (*intmet)(MMG5_pMesh mesh,MMG5_pSol met,int k,char i,int ip,double s);
+-int    (*movridpt)(MMG5_pMesh mesh,MMG5_pSol met,int *list,int ilist);
+-int    (*movintpt)(MMG5_pMesh mesh,MMG5_pSol met,int *list,int ilist);
++double (*MMG5_calelt)(MMG5_pMesh mesh,MMG5_pSol met,MMG5_pTria ptt)X_MMG_WEAK;
++int    (*MMGS_defsiz)(MMG5_pMesh mesh,MMG5_pSol met)X_MMG_WEAK;
++int    (*MMGS_gradsiz)(MMG5_pMesh mesh,MMG5_pSol met)X_MMG_WEAK;
++int    (*MMGS_gradsizreq)(MMG5_pMesh mesh,MMG5_pSol met)X_MMG_WEAK;
++int    (*intmet)(MMG5_pMesh mesh,MMG5_pSol met,int k,char i,int ip,double s)X_MMG_WEAK;
++int    (*movridpt)(MMG5_pMesh mesh,MMG5_pSol met,int *list,int ilist)X_MMG_WEAK;
++int    (*movintpt)(MMG5_pMesh mesh,MMG5_pSol met,int *list,int ilist)X_MMG_WEAK;
+ 
+ /**
+  * Set common pointer functions between mmgs and mmg3d to the matching mmgs

@@ -1,0 +1,41 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 717eba5..b2b19fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,6 +15,7 @@ if ("${draco_root}" STREQUAL "${draco_build_dir}")
+           "And re-run CMake from the draco_build directory.")
+ endif ()
+ 
++include(GNUInstallDirs)
+ include(CMakePackageConfigHelpers)
+ include("${draco_root}/cmake/compiler_flags.cmake")
+ include("${draco_root}/cmake/draco_features.cmake")
+@@ -1119,23 +1120,23 @@ else ()
+   if (NOT MSVC)
+     # Install our pkg-config file.
+     install(FILES "${draco_build_dir}/draco.pc"
+-            DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
++		DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+   endif ()
+ 
+   # Add install rules for lib and executable targets.
+   install(TARGETS dracodec dracoenc draco
+-          DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
++	  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+   if (BUILD_UNITY_PLUGIN)
+     install(TARGETS dracodec_unity
+-            DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
++		DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+   endif ()
+   if (BUILD_MAYA_PLUGIN)
+     install(TARGETS draco_maya_wrapper
+-            DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
++		DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+   endif ()
+ 
+   install(TARGETS draco_decoder draco_encoder DESTINATION
+-          "${CMAKE_INSTALL_PREFIX}/bin")
++	  "${CMAKE_INSTALL_BINDIR}")
+ 
+   # Generate a CMake config file.
+   set(draco_include_install_dir "include/draco")

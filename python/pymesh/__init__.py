@@ -2,9 +2,6 @@ from .version import __version__
 from . import PyMeshSetting
 from .timethis import timethis
 
-from numpy.testing import Tester
-test = Tester().test
-
 # Set default logging handler to avoid "No handler found" warnings.
 import logging
 try:  # Python 2.7+
@@ -54,6 +51,14 @@ from .igl_utils import face_normals, vertex_normals, edge_normals, orient_faces
 from .map_attributes import map_vertex_attribute
 from .map_attributes import map_face_attribute
 from .map_attributes import map_corner_attribute
+import nose2
+import os
+
+
+def test(verbose=3):
+    to_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests")
+    return nose2.main(argv=['nose2', '-s', to_dir, '--verbosity', str(verbose)], module=None)
+
 
 __all__ = [
         "Mesh",

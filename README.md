@@ -122,23 +122,21 @@ variables:
 Let `$PYMESH_PATH` be the root directory of the repository.
 The first step is to compile the optional third party dependencies:
 
-    cd $PYMESH_PATH/third_party
-    build.py all
+    cd $PYMESH_PATH/build-scripts
+    ./build-linux.sh
 
-Third party dependencies will be installed in
-`$PYMESH_PATH/python/pymesh/third_party` directory.
+To see the step-by-step build instructions, review build-script/build-linux.sh
 
-Now we can build the main project.  It is recommended to build out of source:
+You can also build for msvc on Windows, MSVC 2022 with Python 3.10 on Windows10/11 has been tested.
+You should install a newer PowerShell to run the build script, don't use the Windows10/11 integrated version as it's buggy.
+You should install git-for-windows for `git apply xxx.patch` command.
+You may create a virtual environment to run the build process.
 
-    cd $PYMESH_PATH
-    mkdir build
-    cd build
-    cmake ..
-
-To build the PyMesh library:
-
-    make
-    make tests
+	\path\to\your\venv\Scripts\activate.ps1  # this is optional.
+	python -m pip install --upgrade pip
+	python -m pip install nose2 numpy scipy
+	cd $PYMESH_PATH\build-scripts
+	.\build.ps1
 
 Make sure all unit tests are passed before using the library.
 
